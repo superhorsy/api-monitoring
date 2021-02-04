@@ -34,7 +34,7 @@ public class FileService {
                 requests.add(request.toString());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("Request file read error: ", e);
         }
         return requests;
     }
@@ -47,6 +47,7 @@ public class FileService {
         return new FileWriter(file, true);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected File getLogFile() throws IOException {
         File file = new File(logPath);
         file.getParentFile().mkdirs();

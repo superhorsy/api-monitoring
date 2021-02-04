@@ -84,7 +84,7 @@ public class ConsoleRunner implements CommandLineRunner {
     }
 
     @Nullable
-    private RequestData sendRequest(RawHttpRequest request, TcpRawHttpClient client) throws IOException {
+    private RequestData sendRequest(RawHttpRequest request, TcpRawHttpClient client) {
         try {
             long timestamp = Instant.now().toEpochMilli();
             long startTime = System.nanoTime();
@@ -102,16 +102,17 @@ public class ConsoleRunner implements CommandLineRunner {
                  elapsedTimeInSecond
             );
         } catch (IOException e) {
-            log.warn("Can't perform request: " + request.toString());
-            request.writeTo(System.out);
-            e.printStackTrace();
+            log.warn("Can't perform request: " + System.lineSeparator() + request.toString(), e);
         }
         return null;
     }
 
     private List<RawHttpRequest> getRequestsFromConfigFile() {
-        return fileService.getRequestsFromFile(requestsConfigPath, "#").stream().map(this::getRequestFromString)
-                .filter(x -> x != null).collect(Collectors.toList());
+        return fileService.getRequestsFromFile(requestsConfigPath, "#")
+                .stream()
+                .map(this::getRequestFromString)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     @Nullable
@@ -119,8 +120,7 @@ public class ConsoleRunner implements CommandLineRunner {
         try {
             return rawHttp.parseRequest(string);
         } catch (InvalidHttpRequest e) {
-            log.warn("Bad request found: " + string);
-            e.printStackTrace();
+            log.warn("Bad request found: " + string, e);
             return null;
         }
     }
