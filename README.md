@@ -5,7 +5,7 @@ in api-monitoring.log file.
 
 Log file flushes after exceeding 10 kB.
 
-Reequsts should be divided by line, starting with "#".
+Reequsts should be divided by line that starts with "#".
 
 Additionally logs can be view through ELK stack by following scheme:
 
